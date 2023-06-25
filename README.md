@@ -4,4 +4,4 @@
 
 ### running the script:
 
-```python duplicate_content.py -f /path/
+```python duplicate_content.py -f /path/```
