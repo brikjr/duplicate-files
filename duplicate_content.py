@@ -22,7 +22,7 @@ def check_files_in_folder(folder_path):
 
     for file_hash, file_paths in file_hashes.items():
         if len(file_paths) > 1:
-            print("Duplicate files with hash", file_hash)
+            print(f"Duplicate files with hash {file_hash}")
             for file_path in file_paths:
                 print(file_path)
             print()
