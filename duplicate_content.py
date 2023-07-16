@@ -48,10 +48,22 @@ def check_files_in_folder(folder_path):
                 print(file_path) # Print the file paths of the duplicate files
             print()
 
+    if calculate_file_sizes:
+        for file_size, file_paths in file_sizes.items():
+            if len(file_paths) > 1:
+                print(f"Duplicate files with size {file_size} bytes")
+                for file_path in file_paths:
+                    print(file_path)
+                print()
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Check for duplicate files in a folder.')
     parser.add_argument('-f', '--folder', required=True, help='Path to the folder')
+    parser.add_argument('-s', '--calculate-sizes', action='store_true', help='Calculate duplicate file sizes')
     args = parser.parse_args()
 
     folder_path = args.folder
-    check_files_in_folder(folder_path)
+    calculate_sizes = args.calculate_sizes
+
+    check_files_in_folder(folder_path, calculate_sizes)
+
