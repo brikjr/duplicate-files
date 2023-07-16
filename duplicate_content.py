@@ -31,8 +31,6 @@ def check_files_in_folder(folder_path):
         folder_path (str): The path to the folder.
 
     """
-    file_hashes = defaultdict(list)
-
     # Traverse through the folder and its subdirectories
     for root, dirs, files in os.walk(folder_path):
         for file_name in files:
