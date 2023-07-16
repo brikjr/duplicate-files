@@ -4,7 +4,16 @@ import hashlib
 from collections import defaultdict
 
 def get_file_hash(file_path):
-    """Calculate the MD5 hash of a file."""
+    """Calculate the MD5 hash of a file.
+
+    Args:
+        file_path (str): The path to the file.
+
+    Returns:
+        str: The MD5 hash of the file.
+
+    """
+    
     hash_md5 = hashlib.md5()
     with open(file_path, "rb") as f:
         for chunk in iter(lambda: f.read(4096), b""):
