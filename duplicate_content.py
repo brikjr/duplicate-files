@@ -21,7 +21,7 @@ def get_file_hash(file_path):
     return hash_md5.hexdigest() # Return the hexadecimal representation of the hash
     
 
-def check_files_in_folder(folder_path):
+def check_files_in_folder(folder_path, calculate_file_sizes=False):
     """Check for duplicate files in a folder.
 
     This function traverses through the specified folder and its subdirectories,
@@ -31,6 +31,10 @@ def check_files_in_folder(folder_path):
         folder_path (str): The path to the folder.
 
     """
+    # Using collections module defaultdict
+    file_hashes = defaultdict(list)
+    file_sizes = defaultdict(list)
+    
     # Traverse through the folder and its subdirectories
     for root, dirs, files in os.walk(folder_path):
         for file_name in files:
