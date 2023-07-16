@@ -39,6 +39,15 @@ def check_files_in_folder(folder_path):
             file_path = os.path.join(root, file_name)
             file_hash = get_file_hash(file_path) # Calculate the hash of the file
             file_hashes[file_hash].append(file_path) # Store the file path with its hash
+            
+            if calculate_file_sizes:
+                file_size = os.path.getsize(file_path)
+                file_sizes[file_size].append(file_path)
+                
+        for subfolder in dirs:
+            subfolder_path = os.path.join(root, subfolder)
+            check_files_in_folder(subfolder_path, calculate_file_sizes)  # Recursive call to check files in nested folder
+
 
     # Iterate over the file hashes and their corresponding file paths
     for file_hash, file_paths in file_hashes.items():
