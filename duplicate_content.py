@@ -16,9 +16,10 @@ def get_file_hash(file_path):
     
     hash_md5 = hashlib.md5()
     with open(file_path, "rb") as f:
-        file_content = f.read()
-        hash_md5.update(file_content)
-    return hash_md5.hexdigest()
+        file_content = f.read() # Read the entire file content
+        hash_md5.update(file_content) # Update the hash with the file content
+    return hash_md5.hexdigest() # Return the hexadecimal representation of the hash
+    
 
 def check_files_in_folder(folder_path):
     """Check for duplicate files in a folder.
@@ -32,17 +33,19 @@ def check_files_in_folder(folder_path):
     """
     file_hashes = defaultdict(list)
 
+    # Traverse through the folder and its subdirectories
     for root, dirs, files in os.walk(folder_path):
         for file_name in files:
             file_path = os.path.join(root, file_name)
-            file_hash = get_file_hash(file_path)
-            file_hashes[file_hash].append(file_path)
+            file_hash = get_file_hash(file_path) # Calculate the hash of the file
+            file_hashes[file_hash].append(file_path) # Store the file path with its hash
 
+    # Iterate over the file hashes and their corresponding file paths
     for file_hash, file_paths in file_hashes.items():
-        if len(file_paths) > 1:
+        if len(file_paths) > 1: # Check if there are multiple file paths with the same hash
             print(f"Duplicate files with hash {file_hash}")
             for file_path in file_paths:
-                print(file_path)
+                print(file_path) # Print the file paths of the duplicate files
             print()
 
 if __name__ == '__main__':
