@@ -65,20 +65,19 @@ def check_files_in_folder(folder_path, calculate_file_sizes=False):
             subfolder_path = os.path.join(root, subfolder)
             check_files_in_folder(subfolder_path, calculate_file_sizes)  # Recursive call to check files in nested folder
 
-
     # Iterate over the file hashes and their corresponding file paths
     for size, hash_dict in duplicate_files.items():
         for file_hash, file_info_list in hash_dict.items():
             if file_hash == 'file_paths':
                 continue
                 
-        if len(file_info_list) > 1: # Check if there are multiple file paths with the same hash
-            print(f"Duplicate files with hash {file_hash} and size {size} bytes:")
-            for file_info in file_info_list:
-                file_path, _ = file_info  # Unpack the tuple, but we only need the file_path
-                print(f"Name: {os.path.basename(file_path)}")
-                print(f"Absolute Path: {file_path}")
-            print()
+            if len(file_info_list) > 1: # Check if there are multiple file paths with the same hash
+                print(f"Duplicate files with hash {file_hash} and size {size} bytes:")
+                for file_info in file_info_list:
+                    file_path, _ = file_info  # Unpack the tuple, but we only need the file_path
+                    print(f"Name: {os.path.basename(file_path)}")
+                    print(f"Absolute Path: {file_path}")
+                print()
 
     if not calculate_file_sizes:
         for file_hash, file_paths in duplicate_files.items():
