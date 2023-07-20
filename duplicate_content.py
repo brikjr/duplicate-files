@@ -14,12 +14,17 @@ def get_file_hash(file_path):
         str: The MD5 hash of the file.
 
     """
-    
     try:
-        # Execute the md5sum command and capture the output
-        md5sum_output = subprocess.check_output(["md5sum", file_path], universal_newlines=True)
-        file_hash = md5sum_output.split()[0]  # Extract the hash from the output
-        return file_hash
+        if platform.system() == "Darwin":
+            # macOS (use md5 command)
+            md5_output = subprocess.check_output(["md5", file_path], universal_newlines=True)
+            file_hash = md5_output.split()[-1]  # Extract the hash from the output
+            return file_hash
+        else:
+            # Linux/Unix-based systems (use md5sum command)
+            md5sum_output = subprocess.check_output(["md5sum", file_path], universal_newlines=True)
+            file_hash = md5sum_output.split()[0]  # Extract the hash from the output
+            return file_hash
     except subprocess.CalledProcessError as e:
         # Handle any errors that might occur during the md5sum command execution
         print(f"Error calculating hash for {file_path}: {e}")
