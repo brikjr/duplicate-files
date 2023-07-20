@@ -1,6 +1,7 @@
 import os
 import argparse
 import hashlib
+import subprocess
 from collections import defaultdict
 
 def get_file_hash(file_path):
@@ -14,11 +15,15 @@ def get_file_hash(file_path):
 
     """
     
-    hash_md5 = hashlib.md5()
-    with open(file_path, "rb") as f:
-        file_content = f.read() # Read the entire file content
-        hash_md5.update(file_content) # Update the hash with the file content
-    return hash_md5.hexdigest() # Return the hexadecimal representation of the hash
+    try:
+        # Execute the md5sum command and capture the output
+        md5sum_output = subprocess.check_output(["md5sum", file_path], universal_newlines=True)
+        file_hash = md5sum_output.split()[0]  # Extract the hash from the output
+        return file_hash
+    except subprocess.CalledProcessError as e:
+        # Handle any errors that might occur during the md5sum command execution
+        print(f"Error calculating hash for {file_path}: {e}")
+        return None
     
 
 def check_files_in_folder(folder_path, calculate_file_sizes=False):
