@@ -55,7 +55,8 @@ def check_files_in_folder(folder_path, calculate_file_sizes=False):
             
             if calculate_file_sizes:
                 file_size = os.path.getsize(file_path)
-                file_sizes[file_size].append(file_path)
+                file_info = (file_path, file_hash)  # Create a tuple with file_path and file_hash
+                file_hashes[file_size].append(file_path)
                 
         for subfolder in dirs:
             subfolder_path = os.path.join(root, subfolder)
@@ -71,10 +72,11 @@ def check_files_in_folder(folder_path, calculate_file_sizes=False):
             print()
 
     if calculate_file_sizes:
-        for file_size, file_paths in file_sizes.items():
-            if len(file_paths) > 1:
+        for file_size, file_info_list in file_sizes.items():
+            if len(file_info_list) > 1:
                 print(f"Duplicate files with size {file_size} bytes")
-                for file_path in file_paths:
+                for file_info in file_paths:
+                    file_path, file_hash = file_info  # Unpack the tuple
                     print(file_path)
                 print()
 
