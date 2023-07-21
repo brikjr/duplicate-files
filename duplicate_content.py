@@ -32,7 +32,7 @@ def get_file_hash(file_path):
         return None
     
 
-def check_files_in_folder(folder_path, calculate_file_sizes=False):
+def check_files_in_folder(folder_path, calculate_file_sizes):
     """Check for duplicate files in a folder.
 
     This function traverses through the specified folder and its subdirectories,
@@ -92,7 +92,7 @@ def check_files_in_folder(folder_path, calculate_file_sizes=False):
 def main():
     parser = argparse.ArgumentParser(description='Check for duplicate files in a folder.')
     parser.add_argument('-f', '--folder', required=True, help='Path to the folder')
-    parser.add_argument('-s', '--calculate-sizes', action='store_true', help='Calculate duplicate file sizes')
+    parser.add_argument('-s', '--calculate-sizes',required=True, action='store_true', help='Calculate duplicate file sizes')
     args = parser.parse_args()
 
     folder_path = args.folder
