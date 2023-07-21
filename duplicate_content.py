@@ -4,6 +4,7 @@ import hashlib
 import platform
 import subprocess
 from collections import defaultdict
+from modules.duplicate_zip_files import print_duplicate_zip_files
 
 def get_file_hash(file_path):
     """Calculate the MD5 hash of a file.
@@ -99,6 +100,9 @@ def main():
     calculate_sizes = args.calculate_sizes
 
     check_files_in_folder(folder_path, calculate_sizes)
+
+    # After checking for duplicate files in the folder, print duplicate zip files
+    print_duplicate_zip_files(folder_path)
 
 if __name__ == '__main__':
     main()
