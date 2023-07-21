@@ -1,6 +1,6 @@
 # Duplicate Content Checker
 
-Duplicate Content Checker is a Python script that helps you identify duplicate files within a specified folder and its subdirectories. It calculates the MD5 hash of each file to detect duplicate content and can also calculate duplicate file sizes if required.
+The Duplicate Content Finder is a Python script that allows you to check for duplicate files within a specified folder and its subdirectories. It calculates the MD5 hash of each file and identifies duplicate files based on their hashes. Additionally, the script can handle zip archives and identify duplicate files within them.
 
 ## Requirements
 
@@ -15,10 +15,7 @@ Duplicate Content Checker is a Python script that helps you identify duplicate f
 3. Run the following command to check for duplicate files:
 
    ```shell
-   python duplicate_content.py -f <folder_path> [-s]
+   python duplicate_content.py -f <folder_path> -s
    
 4. Replace <folder_path> with the path to the folder you want to scan for duplicates.
 
-### Optional flag:
-
--s or --calculate-sizes: Calculate duplicate file sizes as well.
