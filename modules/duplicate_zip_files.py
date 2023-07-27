@@ -2,39 +2,42 @@ import os
 import hashlib
 import zipfile
 
-def process_zip_file(zip_file_path):
-    """Process a zip file and store partial hashes in a bloom filter."""
-    if not zipfile.is_zipfile(zip_file_path):
-        print(f"Error: {zip_file_path} is not a valid zip file.")
-        return set()
+def get_file_hash(file_data):
+    """Compute the MD5 hash of file data."""
+    hasher = hashlib.md5()
+    hasher.update(file_data)
+    return hasher.hexdigest()
 
-    # Create the bloom filter or use any other suitable data structure
-    bloom_filter = set()
+def check_single_zip_for_duplicates(zip_file_path):
+    """Check for duplicate files in a single zip archive without opening it.
 
-    with zipfile.ZipFile(zip_file_path, 'r') as zip_file:
-        for file_name in zip_file.namelist():
-            # Extract a chunk of data from each file in the zip archive
-            with zip_file.open(file_name) as file:
-                partial_data = file.read(1024)  # Adjust the chunk size as needed
+    Args:
+        zip_file_path (str): The path to the zip archive.
 
-            # Calculate the MD5 hash of the partial data
-            partial_hash = hashlib.md5(partial_data).hexdigest()
+    Returns:
+        list: A list of duplicate file paths (empty list if no duplicates).
 
-            # Store the partial hash in the bloom filter
-            bloom_filter.add(partial_hash)
+    """
+    duplicate_file_paths = []
+    file_info_by_size = {}
 
-    return bloom_filter
+    with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+        for info in zip_ref.infolist():
+            # Skip directories and zero-sized files
+            if info.file_size == 0 or info.is_dir():
+                continue
 
-def print_duplicate_zip_files(folder_path):
-    """Print duplicate files in zip archives in the specified folder."""
-    # Traverse through the folder and its subdirectories
-    for root, dirs, files in os.walk(folder_path):
-        for file_name in files:
-            file_path = os.path.join(root, file_name)
+            with zip_ref.open(info.filename) as file:
+                file_data = file.read()
+                file_info = (info.filename, info.file_size, get_file_hash(file_data))
 
-            if file_name.endswith('.zip'):
-                zip_bloom_filter = process_zip_file(file_path)
-                print(f"Duplicate Zip files with name {file_name}:")
-                for file_path in zip_bloom_filter:
-                    print(f"Duplicate Hashes: {file_path}")
-                print()
+                # Check for duplicate files based on size and hash
+                if file_info[1] in file_info_by_size:
+                    if file_info[2] in file_info_by_size[file_info[1]]:
+                        duplicate_file_paths.append(file_info[0])
+                    else:
+                        file_info_by_size[file_info[1]].append(file_info[2])
+                else:
+                    file_info_by_size[file_info[1]] = [file_info[2]]
+
+    return duplicate_file_paths
